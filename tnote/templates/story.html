@@ -1,0 +1,10 @@
+{% extends "index.html" %}
+{% block title %}viewentry{% endblock %}
+
+{% block leftbar %}
+<div id="entries">
+	{% include "content.html" with items=entries.object_list %}
+	{% include "comment.html" with items=entries.object_list %}
+
+</div>
+{% endblock %}
