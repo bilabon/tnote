@@ -1,4 +1,4 @@
-from noteapp.models import Entry
+from tnote.noteapp.models import Entry
 from django.contrib import admin
 
 

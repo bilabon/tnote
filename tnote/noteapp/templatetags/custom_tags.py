@@ -2,7 +2,7 @@ from django import template
 
 register = template.Library()
 
-from noteapp.models import *
+from tnote.noteapp.models import *
 
 
 @register.simple_tag
