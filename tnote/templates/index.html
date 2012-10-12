@@ -4,7 +4,6 @@
 {% block title %}Main{% endblock %}
 
 {% block leftbar %}
-
 <div id="entries">
 
 {% for e in entries %}
@@ -12,6 +11,7 @@
 	<a href="#" class="entry_title" rel="bookmark">{{ e.title }}</a> </br>
 	<span class="entry_date">{{ e.date }}</span></br>
 </h2>
+
 <div class="entry"></br>{{ e.text|linebreaksbr }}</div>
 {% endfor %}
 
