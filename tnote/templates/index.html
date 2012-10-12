@@ -1,27 +1,20 @@
 {% extends "base.html" %}
 {% load custom_tags %}
+
 {% block title %}Main{% endblock %}
 
 {% block leftbar %}
-<div id="entries">
-	
-	{% for e in entries %}
 
+<div id="entries">
+
+{% for e in entries %}
 <h2>
 	<a href="#" class="entry_title" rel="bookmark">{{ e.title }}</a> </br>
 	<span class="entry_date">{{ e.date }}</span></br>
 </h2>
 <div class="entry"></br>{{ e.text|linebreaksbr }}</div>
+{% endfor %}
 
-	{% endfor %}
-	
-<h2>
-	<a href="#" class="entry_title" rel="bookmark">Render one text note by given id of note</a> </br>
-</h2>
-<div class="entry"></br><b>{% render_one_text_note "1" %}</b></div>
-
-	
-	<br/><br/><br/><br/><br/><br/>
 </div>
 {% endblock %}
 

@@ -14,3 +14,9 @@ def render_one_text_note(number_id):
         return ""
     else:
         return t.text.replace('\n', '</br>')
+
+
+@register.inclusion_tag('sh.html')
+def render_one_text_note():
+    entries = Entry.objects.all()
+    return {'entries': entries}
