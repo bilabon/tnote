@@ -1,6 +1,7 @@
 from django import template
-register = template.Library()
 from tnote.noteapp.models import *
+
+register = template.Library()
 
 
 @register.inclusion_tag('sh.html')
