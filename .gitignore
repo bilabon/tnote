@@ -1,5 +1,5 @@
 # Numerous always-ignore extensions
 *.pyc
 *.elc
-8.db
+*.db
 *~
