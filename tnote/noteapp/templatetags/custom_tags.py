@@ -1,22 +1,9 @@
 from django import template
-
 register = template.Library()
-
 from tnote.noteapp.models import *
 
 
-@register.simple_tag
-def render_one_text_note(number_id):
-    try:
-        t = Entry.objects.get(pk=number_id)
-    except Entry.DoesNotExist:
-        print "Error. Incorrect ID. Apress isn't in the database yet."
-        return ""
-    else:
-        return t.text.replace('\n', '</br>')
-
-
 @register.inclusion_tag('sh.html')
-def render_one_text_note():
+def render_all_text_note():
     entries = Entry.objects.all()
     return {'entries': entries}

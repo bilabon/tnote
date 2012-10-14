@@ -6,14 +6,9 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+from tnote.noteapp.models import Entry
+from django.template import Context
+from django.template import Template
 
 
 class MyTests(TestCase):
@@ -30,9 +25,6 @@ class MyTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
 
-from tnote.noteapp.models import Entry
-
-
 class EntryTestCase(TestCase):
     def setUp(self):
         self.one = Entry.objects.create(title="title_1", text="text_1",
@@ -44,16 +36,13 @@ class EntryTestCase(TestCase):
         self.assertEqual(self.one.__unicode__(), 'title_1')
         self.assertEqual(self.two.__unicode__(), 'title_2')
 
-from django.template import Context
-from django.template import Template
-
 
 class TemplateTagsTestCase(TestCase):
 
     def setUp(self):
-        self.obj = Entry.objects.create(text='test_text')
+        self.obj = Entry.objects.create(text='test_text_TemplateTagsTestCase')
 
     def testViewsForObject(self):
-        t = Template('{% load custom_tags %}{% render_one_text_note %}')
+        t = Template('{% load custom_tags %}{% render_all_text_note %}')
         c = Context({'obj': self.obj})
-        self.assertEqual(t.render(c), '<ul><li>test_text</li></ul>\n')
+        self.assertIn('test_text_TemplateTagsTestCase', t.render(c))
