@@ -6,9 +6,9 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from tnote.noteapp.models import Entry
 from django.template import Context
 from django.template import Template
+from tnote.noteapp.models import Entry
 
 
 class MyTests(TestCase):
@@ -38,11 +38,11 @@ class EntryTestCase(TestCase):
 
 
 class TemplateTagsTestCase(TestCase):
-
     def setUp(self):
-        self.obj = Entry.objects.create(text='test_text_TemplateTagsTestCase')
+        self.obj = Entry.objects.create(
+                         text='test_text_TemplateTagsTestCase', id=4)
 
     def testViewsForObject(self):
-        t = Template('{% load custom_tags %}{% render_all_text_note %}')
+        t = Template('{% load custom_tags %}{% render_one_text_note 4 %}')
         c = Context({'obj': self.obj})
         self.assertIn('test_text_TemplateTagsTestCase', t.render(c))

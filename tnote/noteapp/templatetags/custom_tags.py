@@ -4,7 +4,12 @@ from tnote.noteapp.models import *
 register = template.Library()
 
 
-@register.inclusion_tag('sh.html')
-def render_all_text_note():
-    entries = Entry.objects.all()
-    return {'entries': entries}
+@register.simple_tag
+def render_one_text_note(number_id):
+    try:
+        t = Entry.objects.get(pk=number_id)
+    except Entry.DoesNotExist:
+        print "Error. Incorrect ID. Apress isn't in database yet."
+        return ""
+    else:
+        return t.text
