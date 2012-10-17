@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+
+{% block title %}Main{% endblock %}
+
+{% block leftbar %}
+
+<div id="entries">
+
+<ul>
+{% for e in entries %}
+<li>{% render_one_text_note e.id %}</li>
+{% endfor %}
+</ul>
+</div>
+{% endblock %}
+
+
+
