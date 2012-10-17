@@ -1,29 +1,23 @@
 [
   {
     "model": "noteapp.Entry",
-    "pk": 89,
+    "pk": 1,
     "fields": {
-      "title": "Providing initial data with fixtures",
-      "text": "Loading data is easy: njust call manage.py loaddata <fixturename>, where <fixturename> is the name of the fixture file you've created. Each time you run loaddata, the data will be read from the fixture and re-loaded into the database. Note this means that if you change one of the rows created by a fixture and then run loaddata again, you'll wipe out any changes you've made.",
-      "date": "2012-10-07 19:21:36.369778"
+      "text": "Loading data is easy: njust call manage.py loaddata <fixturename>, where <fixturename> is the name of the fixture file you've created. Each time you run loaddata, the data will be read from the fixture and re-loaded into the database. Note this means that if you change one of the rows created by a fixture and then run loaddata again, you'll wipe out any changes you've made."
     }
   },
   {
     "model": "noteapp.Entry",
-    "pk": 90,
+    "pk": 2,
     "fields": {
-      "title": "Where Django finds fixture files",
-      "text": "By default, Django looks in the fixtures directory inside each app for fixtures. You can set the FIXTURE_DIRS setting to a list of additional directories where Django should look.\n When running manage.py loaddata, you can also specify an absolute path to a fixture file, which overrides searching the usual directories.",
-      "date": "2012-10-08 19:21:36.369779"
+      "text": "By default, Django looks in the fixtures directory inside each app for fixtures. You can set the FIXTURE_DIRS setting to a list of additional directories where Django should look.\n When running manage.py loaddata, you can also specify an absolute path to a fixture file, which overrides searching the usual directories."
     }
   },  
   {
     "model": "noteapp.Entry",
-    "pk": 91,
+    "pk": 3,
     "fields": {
-      "title": "Providing initial SQL data",
-      "text": "Django provides a hook for passing the database arbitrary SQL that's executed just after the CREATE TABLE statements when you run syncdb. You can use this hook to populate default records, or you could also create SQL functions, views, triggers, etc.\nThe hook is simple: Django just looks for a file called sql/<modelname>.sql, in your app directory, where <modelname> is the model's name in lowercase.\n So, if you had a Person model in an app called myapp, you could add arbitrary SQL to the file sql/person.sql inside your myapp directory.",
-      "date": "2012-10-09 19:21:36.369780"
+      "text": "Django provides a hook for passing the database arbitrary SQL that's executed just after the CREATE TABLE statements when you run syncdb. You can use this hook to populate default records, or you could also create SQL functions, views, triggers, etc.\nThe hook is simple: Django just looks for a file called sql/<modelname>.sql, in your app directory, where <modelname> is the model's name in lowercase.\n So, if you had a Person model in an app called myapp, you could add arbitrary SQL to the file sql/person.sql inside your myapp directory."
     }
   }
 ]

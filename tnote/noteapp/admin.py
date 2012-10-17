@@ -3,8 +3,6 @@ from django.contrib import admin
 
 
 class EntryAdmin(admin.ModelAdmin):
-    list_display = ('title', 'text', 'date')
-    search_fields = ['title']
-    date_hierarchy = 'date'
+    search_fields = ['text']
 
 admin.site.register(Entry, EntryAdmin)
