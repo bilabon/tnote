@@ -9,3 +9,15 @@ from tnote.noteapp.forms import *
 def index(request):
     entries = Entry.objects.all()
     return render(request, 'index.html', {'entries': entries})
+
+
+def formadd(request):
+    if request.method == 'POST':
+        form = AddForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/add/')
+    else:
+        form = AddForm()
+    return render(request, 'formadd.html', {'form': form},
+                              context_instance=RequestContext(request),)
