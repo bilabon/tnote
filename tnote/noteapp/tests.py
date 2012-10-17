@@ -6,18 +6,13 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from django.template import Context
-from django.template import Template
+from django.template import Context, Template
 from tnote.noteapp.models import Entry
 
 
 class MyTests(TestCase):
     def test_index(self):
         response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-
-    def test_renderbytag(self):
-        response = self.client.get('/renderbytag/')
         self.assertEqual(response.status_code, 200)
 
     def test_admin(self):
