@@ -15,6 +15,10 @@ class MyTests(TestCase):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
+    def test_add(self):
+        response = self.client.get('/add/')
+        self.assertEqual(response.status_code, 200)
+
     def test_admin(self):
         response = self.client.get('/admin/')
         self.assertEqual(response.status_code, 200)
