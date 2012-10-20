@@ -8,7 +8,7 @@ from tnote.noteapp.forms import *
 
 def index(request):
     entries = Entry.objects.all()
-    return render(request, 'index.html', {'entries': entries})
+    return render(request, 'index.html', {'entries': entries},)
 
 
 def formadd(request):
@@ -19,5 +19,4 @@ def formadd(request):
             return HttpResponseRedirect('/add/')
     else:
         form = AddForm()
-    return render(request, 'formadd.html', {'form': form},
-                              context_instance=RequestContext(request),)
+    return render(request, 'formadd.html', {'form': form},)

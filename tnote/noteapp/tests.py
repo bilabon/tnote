@@ -6,8 +6,9 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from django.template import Context, Template
+from django.template import Context, Template, RequestContext
 from tnote.noteapp.models import Entry
+from tnote.noteapp.utils.context_processors import total_count_of_notes
 
 
 class MyTests(TestCase):
@@ -43,3 +44,14 @@ class TemplateTagsTestCase(TestCase):
         t = Template('{% load custom_tags %}{% render_one_text_note 4 %}')
         c = Context({'obj': self.obj})
         self.assertIn('test_text_TemplateTagsTestCase', t.render(c))
+
+
+class ContextProcessorsTestCase(TestCase):
+    def setUp(self):
+        self.obj = Entry.objects.create(text='text of note')
+
+    def testTotalCountOfNotes(self):
+        t = Template('{{ total_count_of_notes }}')
+        c = RequestContext({'obj': self.obj})
+        q = Entry.objects.count()
+        self.assertIn(str(q), t.render(c))
