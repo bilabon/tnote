@@ -9,22 +9,16 @@
 
 {% block bar %}
 	<div class="well well-small">
-		
-    {% if form.errors %}
-		<div class="alert">
-		  <button type="button" class="close" data-dismiss="alert">×</button>
-		  <strong>Warning!</strong> lease correct the error{{ form.errors|pluralize }} below.
-		</div>
-    {% endif %}
 
-    <form action="" method="post">
-    {% csrf_token %}
+<form id="add_form" method="post" action="/add/">{% csrf_token %}
+	<div class="error_list">
+	</div>
+	<ul>
+		{{ form.as_ul }}
+		<li><span id="push_form"><input type="button" class="btn btn-small" value="Save"></span></li>
+	</ul>
+</form>
 
-            {{ form.as_p }}
-
-        <p><input class="btn" type="submit" value="Submit"></p>
-    </form>
-    
 	</div>
 
 {% endblock %}
