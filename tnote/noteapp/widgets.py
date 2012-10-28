@@ -1,9 +1,9 @@
-from django import forms
 from django.conf import settings
-from django.forms import Textarea
+from django.forms import widgets
+from django.utils.safestring import mark_safe
 
 
-class DynamicAmountOfSymbols(forms.Textarea):
+class DynamicAmountOfSymbols(widgets.Textarea):
     class Media:
         js = (
         #"http://code.jquery.com/jquery-latest.js",
@@ -11,8 +11,13 @@ class DynamicAmountOfSymbols(forms.Textarea):
         settings.STATIC_URL + "js/js_of_noteapp.js",
         )
 
-    def __init__(self, *args, **kwargs):
-        attrs = kwargs.setdefault('attrs', {})
-        attrs.setdefault('cols', '100')
-        attrs.setdefault('rows', '10')
-        super(DynamicAmountOfSymbols, self).__init__(*args, **kwargs)
+    def __init__(self, attrs=None):
+        default_attrs = {'cols': '100', 'rows': '10'}
+        if attrs:
+            default_attrs.update(attrs)
+        super(DynamicAmountOfSymbols, self).__init__(default_attrs)
+
+    def render(self, name, value, attrs=None):
+        output = super(DynamicAmountOfSymbols, self).render(name, value, attrs)
+        output += "</br>test output"
+        return mark_safe(output)

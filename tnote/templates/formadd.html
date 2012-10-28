@@ -8,17 +8,37 @@
 {% endblock %}
 
 {% block bar %}
-	<div class="well well-small">
+    <div class="well well-small">
 
-<form id="add_form" method="post" action="/add/">{% csrf_token %}
-	<div class="error_list">
-	</div>
-	<ul>
-		{{ form.as_ul }}
-		<li><span id="push_form"><input type="button" class="btn btn-small" value="Save"></span></li>
-	</ul>
+<form id="add_form" method="post" action="/add/" enctype="multipart/form-data">{% csrf_token %}
+    <div class="error_list"></div>
+    <ul>
+        {{ form.as_ul }}
+        </br>
+        <li><span id="push_form"><input type="button" class="btn btn-small" value="Save note"></span></li>
+        <input id="Reset" type="reset" style="display:none">
+    </ul>
 </form>
 
-	</div>
+<form id="add_formimg" method="post" action="/add/" enctype="multipart/form-data">{% csrf_token %}
+    <div class="error_list"></div>
+    <ul>
+        {{ formimg.as_ul }}
+        
+        <span id="push_formimg"><input type="button" id="pushimg" style="display:none"  value="Save"></span>
+        <input id="Resetimg" type="reset" style="display:none">
+    </ul>
+</form>
+
+
+
+
+<div class="progress progress-striped active">
+        <div class="bar"></div>
+        <div class="percent">0%</div>
+    </div>
+<div id="status"></div>
+
+    </div>
 
 {% endblock %}

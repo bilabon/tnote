@@ -2,7 +2,7 @@
 {% load custom_tags %}
 
 {% block title %}Main{% endblock %}
-    
+
 {% block nav %}
 <li class="active"><a href="/">Home</a></li>
 <li><a href="/add">Add text note</a></li>
@@ -10,18 +10,15 @@
 
 {% block bar %}
 <div class="alert alert-info">
-	<button type="button" class="close" data-dismiss="alert">×</button>
-	<h4>Total count of notes: <span class="badge badge-warning">{{ total_count_of_notes }}</span> notes.</h4>
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4>Total count of notes: <span class="badge badge-warning">{{ total_count_of_notes }}</span> notes.</h4>
 </div>
 
 
-	{% for e in entries %}
-	<div class="well well-small">
-		  <p>{% render_one_text_note e.id %}</span></p>		  
-	</div>
-	{% endfor %}
+    {% for e in entries %}
+    <div class="well well-small">
+        <p>{% render_one_text_note e.id %}</p>
+    </div>
+    {% endfor %}
 
 {% endblock %}
-
-
-
