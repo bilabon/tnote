@@ -12,22 +12,17 @@
 
 <form id="add_form" method="post" action="/add/" enctype="multipart/form-data">{% csrf_token %}
     <div class="error_list"></div>
-    <ul>
-        {{ form.as_ul }}
+        {{ form.as_p }}
         </br>
-        <li><span id="push_form"><input type="button" class="btn btn-small" value="Save note"></span></li>
+        <span id="push_form"><input type="button" class="btn btn-small" value="Save note"></span>
         <input id="Reset" type="reset" style="display:none">
-    </ul>
 </form>
 
 <form id="add_formimg" method="post" action="/add/" enctype="multipart/form-data">{% csrf_token %}
     <div class="error_list"></div>
-    <ul>
-        {{ formimg.as_ul }}
-        
+        {{ formimg.as_p }}        
         <span id="push_formimg"><input type="button" id="pushimg" style="display:none"  value="Save"></span>
         <input id="Resetimg" type="reset" style="display:none">
-    </ul>
 </form>
 
 
