@@ -31,6 +31,8 @@ $(document).ready(function() {
             },
             complete: function(xhr) {
                 status.html(xhr.responseText);
+                bar.width('100%');
+                percent.html('100%');
             },
             success: function(data, statusText, xhr, $form) {
                 // remove errors
