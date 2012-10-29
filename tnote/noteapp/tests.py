@@ -38,10 +38,10 @@ class EntryTestCase(TestCase):
 class TemplateTagsTestCase(TestCase):
     def setUp(self):
         self.obj = Entry.objects.create(
-                         text='test_text_TemplateTagsTestCase', id=4)
+                         text='test_text_TemplateTagsTestCase', id=999)
 
     def testViewsForObject(self):
-        t = Template('{% load custom_tags %}{% render_one_text_note 4 %}')
+        t = Template('{% load custom_tags %}{% render_one_text_note 999 %}')
         c = Context({'obj': self.obj})
         self.assertIn('test_text_TemplateTagsTestCase', t.render(c))
 
