@@ -8,7 +8,7 @@ class DynamicAmountOfSymbols(widgets.Textarea):
         js = (
         #"http://code.jquery.com/jquery-latest.js",
         settings.STATIC_URL + "js/jquery-1.8.2.min.js",
-        settings.STATIC_URL + "js/js_of_noteapp.js",
+        settings.STATIC_URL + "js/js_amount_of_symbols.js",
         )
 
     def __init__(self, attrs=None):

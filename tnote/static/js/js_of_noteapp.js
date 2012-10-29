@@ -1,13 +1,3 @@
-$(function() {
-    $("label[for='id_text']").html("Text: 0");
-    $("textarea[id='id_text']").click();
-    $("label[for='id_text']").html("Text: " + $("textarea[id='id_text']").val().length);
-    $("textarea[id='id_text']").bind('change click keyup', function count() {
-        number = $("textarea[id='id_text']").val().length;
-        $("label[for='id_text']").html("Text: " + number);
-    });
-});
-
 function tstFile(val) {
     var v = val.value;
     if (v !== false) {
@@ -41,8 +31,6 @@ $(document).ready(function() {
             },
             complete: function(xhr) {
                 status.html(xhr.responseText);
-                bar.width('100%');
-                percent.html('100%');
             },
             success: function(data, statusText, xhr, $form) {
                 // remove errors
@@ -107,4 +95,3 @@ $(document).ready(function() {
 //*-----------------------*/
 }
 );
-
