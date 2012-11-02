@@ -9,6 +9,8 @@ from django.test import TestCase
 from django.template import Context, Template, RequestContext
 from tnote.noteapp.models import Entry
 from tnote.noteapp.utils.context_processors import total_count_of_notes
+from tnote.noteapp.widgets import DynamicAmountOfSymbols
+from django.test.client import Client
 
 
 class MyTests(TestCase):
@@ -38,20 +40,40 @@ class EntryTestCase(TestCase):
 class TemplateTagsTestCase(TestCase):
     def setUp(self):
         self.obj = Entry.objects.create(
-                         text='test_text_TemplateTagsTestCase', id=4)
+                         text='test_text_TemplateTagsTestCase', id=999)
 
     def testViewsForObject(self):
-        t = Template('{% load custom_tags %}{% render_one_text_note 4 %}')
-        c = Context({'obj': self.obj})
+        t = Template('{% load custom_tags %}{% render_one_text_note 999 %}')
+        c = Context()
         self.assertIn('test_text_TemplateTagsTestCase', t.render(c))
 
 
 class ContextProcessorsTestCase(TestCase):
     def setUp(self):
-        self.obj = Entry.objects.create(text='text of note')
+        self.obj = Entry.objects.create(text='text of note',)
 
     def testTotalCountOfNotes(self):
         t = Template('{{ total_count_of_notes }}')
-        c = RequestContext({'obj': self.obj})
+        c = RequestContext({})
         q = Entry.objects.count()
         self.assertIn(str(q), t.render(c))
+
+
+class FormsWidgetsTestCase(TestCase):
+    def test_DynamicAmountOfSymbols(self):
+        w = DynamicAmountOfSymbols()
+        self.assertHTMLEqual(w.render('msg', ''),
+                '<textarea rows="10" cols="100" name="msg"></textarea>')
+        w = DynamicAmountOfSymbols(attrs={'rows': '50', 'cols': '50'})
+        self.assertHTMLEqual(w.render('msg', ''),
+                '<textarea rows="50" cols="50" name="msg"></textarea>')
+
+    def test_AddNewNote_ajax(self):
+        response = self.client.post('/add/', {'text': '12345'},
+                                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        #length of post < 10 ; response: '"result": "error"'
+        self.assertIn('"result": "error"', response.content)
+        response = self.client.post('/add/', {'text': '12345678910'},
+                                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        #length of post > 10 ; response: '"success"'
+        self.assertIn('"result": "success"', response.content)

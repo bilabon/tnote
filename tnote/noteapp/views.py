@@ -11,15 +11,16 @@ from tnote.noteapp.forms import AddForm, AddImage
 
 def index(request):
     entries = Entry.objects.all()
-    return direct_to_template(request, 'index.html', {'entries': entries, },)
+    return render(request, 'index.html', {'entries': entries, },)
 
 
 def formadd(request):
     if (request.method == 'POST' and request.is_ajax()):
-        n = str(random.randint(0, 100000))
         if (request.FILES):
+            n = str(random.randint(0, 100000))
             try:
-                request.FILES['imagefile'].name = u"%s.image" % n
+                img_extension = request.FILES['imagefile'].name.split('.')[-1]
+                request.FILES['imagefile'].name = u"%s.%s" % (n, img_extension)
             except:
                 print 'Error image.'
         form = AddForm(request.POST)
@@ -52,6 +53,5 @@ def formadd(request):
                                                   'result2': 'error', }))
     form = AddForm()
     formimg = AddImage()
-    return direct_to_template(request, "formadd.html",
-                              extra_context={'form': form,
+    return render(request, "formadd.html", {'form': form,
                                              'formimg': formimg, },)
