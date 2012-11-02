@@ -9,6 +9,7 @@ from django.test import TestCase
 from django.template import Context, Template, RequestContext
 from tnote.noteapp.models import Entry
 from tnote.noteapp.utils.context_processors import total_count_of_notes
+from tnote.noteapp.widgets import DynamicAmountOfSymbols
 
 
 class MyTests(TestCase):
@@ -55,3 +56,11 @@ class ContextProcessorsTestCase(TestCase):
         c = RequestContext({})
         q = Entry.objects.count()
         self.assertIn(str(q), t.render(c))
+
+
+class FormsWidgetsTestCase(TestCase):
+    def test_DynamicAmountOfSymbols(self):
+        w = DynamicAmountOfSymbols()
+        self.assertHTMLEqual(w.render('msg', ''), '<textarea rows="10" cols="100" name="msg"></textarea>')
+        w = DynamicAmountOfSymbols(attrs={'rows': '50', 'cols': '50'})
+        self.assertHTMLEqual(w.render('msg', ''), '<textarea rows="50" cols="50" name="msg"></textarea>')
