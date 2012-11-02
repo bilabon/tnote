@@ -1,7 +1,5 @@
-from django.shortcuts import render, get_list_or_404
-from django.shortcuts import get_object_or_404, HttpResponseRedirect
-from django.template import RequestContext
-
+from django.shortcuts import render, HttpResponseRedirect
+from django.contrib import messages
 from tnote.noteapp.models import *
 from tnote.noteapp.forms import *
 
@@ -16,7 +14,10 @@ def formadd(request):
         form = AddForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Note has been sent.')
             return HttpResponseRedirect('/add/')
+        else:
+            messages.error(request, 'Error!')
     else:
         form = AddForm()
     return render(request, 'formadd.html', {'form': form},)
