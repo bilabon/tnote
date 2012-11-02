@@ -6,9 +6,8 @@ from tnote.noteapp.widgets import DynamicAmountOfSymbols
 
 class EntryAdmin(admin.ModelAdmin):
     search_fields = ['text']
-    #list_display = ('text',)
     formfield_overrides = {
-        models.TextField: {'widget': DynamicAmountOfSymbols},
+        models.TextField: {'widget': DynamicAmountOfSymbols()},
     }
 
 admin.site.register(Imgfile)

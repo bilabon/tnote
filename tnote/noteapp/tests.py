@@ -42,16 +42,16 @@ class TemplateTagsTestCase(TestCase):
 
     def testViewsForObject(self):
         t = Template('{% load custom_tags %}{% render_one_text_note 999 %}')
-        c = Context({'obj': self.obj})
+        c = Context()
         self.assertIn('test_text_TemplateTagsTestCase', t.render(c))
 
 
 class ContextProcessorsTestCase(TestCase):
     def setUp(self):
-        self.obj = Entry.objects.create(text='text of note')
+        self.obj = Entry.objects.create(text='text of note',)
 
     def testTotalCountOfNotes(self):
         t = Template('{{ total_count_of_notes }}')
-        c = RequestContext({'obj': self.obj})
+        c = RequestContext({})
         q = Entry.objects.count()
         self.assertIn(str(q), t.render(c))

@@ -11,7 +11,7 @@ from tnote.noteapp.forms import AddForm, AddImage
 
 def index(request):
     entries = Entry.objects.all()
-    return direct_to_template(request, 'index.html', {'entries': entries, },)
+    return render(request, 'index.html', {'entries': entries, },)
 
 
 def formadd(request):
@@ -53,6 +53,5 @@ def formadd(request):
                                                   'result2': 'error', }))
     form = AddForm()
     formimg = AddImage()
-    return direct_to_template(request, "formadd.html",
-                              extra_context={'form': form,
+    return render(request, "formadd.html", {'form': form,
                                              'formimg': formimg, },)
