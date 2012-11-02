@@ -10,6 +10,7 @@ from django.template import Context, Template, RequestContext
 from tnote.noteapp.models import Entry
 from tnote.noteapp.utils.context_processors import total_count_of_notes
 from tnote.noteapp.widgets import DynamicAmountOfSymbols
+from django.test.client import Client
 
 
 class MyTests(TestCase):
@@ -61,6 +62,18 @@ class ContextProcessorsTestCase(TestCase):
 class FormsWidgetsTestCase(TestCase):
     def test_DynamicAmountOfSymbols(self):
         w = DynamicAmountOfSymbols()
-        self.assertHTMLEqual(w.render('msg', ''), '<textarea rows="10" cols="100" name="msg"></textarea>')
+        self.assertHTMLEqual(w.render('msg', ''),
+                '<textarea rows="10" cols="100" name="msg"></textarea>')
         w = DynamicAmountOfSymbols(attrs={'rows': '50', 'cols': '50'})
-        self.assertHTMLEqual(w.render('msg', ''), '<textarea rows="50" cols="50" name="msg"></textarea>')
+        self.assertHTMLEqual(w.render('msg', ''),
+                '<textarea rows="50" cols="50" name="msg"></textarea>')
+
+    def test_AddNewNote_ajax(self):
+        response = self.client.post('/add/', {'text': '12345'},
+                                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        #length of post < 10 ; response: '"result": "error"'
+        self.assertIn('"result": "error"', response.content)
+        response = self.client.post('/add/', {'text': '12345678910'},
+                                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        #length of post > 10 ; response: '"success"'
+        self.assertIn('"result": "success"', response.content)
