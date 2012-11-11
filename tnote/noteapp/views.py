@@ -14,10 +14,10 @@ def formadd(request):
         form = AddForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Note has been sent.')
-            return HttpResponseRedirect('/add/')
+            messages.success(request, 'Note was successfully added.')
+            return render(request, 'formadd.html', {'form': form},)
         else:
-            messages.error(request, 'Error!')
+            messages.error(request, 'Some error in your data.')
     else:
         form = AddForm()
     return render(request, 'formadd.html', {'form': form},)
