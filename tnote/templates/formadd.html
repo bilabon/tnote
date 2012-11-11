@@ -20,10 +20,14 @@
     {% endif %}
 
     <form action="/add/" method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <p><input class="btn" type="submit" value="Submit"></p>
+        {{ form.as_p }}
+        <p><input class="btn" type="submit" value="Submit"></p>
     </form>
 
 </div>
 
+{% endblock %}
+
+{% block js %}
+<script src="{{ STATIC_URL }}js/count_of_notes.js"></script>
 {% endblock %}

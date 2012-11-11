@@ -4,18 +4,15 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    
+
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/bootstrap-responsive.css" rel="stylesheet">
-    
+
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    
   </head>
 
 <body>
@@ -24,7 +21,6 @@
       <div class="navbar-inner">
         <div class="container">
           <a class="brand" href="/">Project name</a>
-
             <ul class="nav">
               {% block nav %}
               <li class="active"><a href="#">Home</a></li>
@@ -36,20 +32,20 @@
         </div>
       </div>
     </div>
-    
 
-    <div class="container">
 
-			{% block bar %}
-			{% endblock %}
-
-    </div> <!-- /container -->
+<div class="container"><!-- container -->
+    {% block bar %}
+    {% endblock %}
+</div> <!-- /container -->
 
 
 
 <script src="{{ STATIC_URL }}js/jquery-1.8.2.min.js"></script>
 <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
-<script src="{{ STATIC_URL }}js/count_of_notes.js"></script>
+
+    {% block js %}
+    {% endblock %}
 
 </body>
 </html>
