@@ -19,15 +19,19 @@
     </ul>
     {% endif %}
 
-    <form action="/add/" method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <p><input class="btn" type="submit" value="Submit"></p>
-    </form>
+<form id="add_form" method="post" action="/add/">{% csrf_token %}
+    <div id="error_list"></div>
+{{ form.as_p }}
+<span id="push_form"><input type="submit" id="sbmtypeid" class="btn" value="Submit"></span>
 
+</form>
+<div id="status"></div>
 </div>
 
 {% endblock %}
 
 {% block js %}
+<script src="{{ STATIC_URL }}js/jquery.form.js"></script>
 <script src="{{ STATIC_URL }}js/count_of_notes.js"></script>
+<script src="{{ STATIC_URL }}js/push_form.js"></script>
 {% endblock %}
