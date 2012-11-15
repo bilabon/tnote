@@ -20,7 +20,6 @@ def formadd(request):
             form = AddForm()
             response = 'Note was successfully added.'
             if request.is_ajax():
-                print request.is_ajax()
                 return HttpResponse(simplejson.dumps({'response': response,
                                                       'result': 'success'}))
             messages.success(request, response)
