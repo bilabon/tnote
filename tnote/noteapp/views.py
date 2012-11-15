@@ -1,5 +1,8 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render
 from django.contrib import messages
+from django.http import HttpResponse
+from django.utils import simplejson
+
 from tnote.noteapp.models import *
 from tnote.noteapp.forms import *
 
@@ -14,9 +17,18 @@ def formadd(request):
         form = AddForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Note was successfully added.')
+            form = AddForm()
+            response = 'Note was successfully added.'
+            if request.is_ajax():
+                return HttpResponse(simplejson.dumps({'response': response,
+                                                      'result': 'success'}))
+            messages.success(request, response)
             return render(request, 'formadd.html', {'form': form},)
         else:
+            response = 'Some error in your data.'
+            if request.is_ajax():
+                return HttpResponse(simplejson.dumps({'response': response,
+                                                      'result': 'error'}))
             messages.error(request, 'Some error in your data.')
     else:
         form = AddForm()
