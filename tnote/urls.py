@@ -20,5 +20,4 @@ urlpatterns = patterns('',
                                 {'document_root': settings.MEDIA_ROOT}),
     (r'^$', index),
     (r'^add/$', formadd),
-    (r'^addimg/$', upload_img),
 )

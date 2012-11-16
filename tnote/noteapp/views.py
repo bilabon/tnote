@@ -1,4 +1,3 @@
-from django.views.decorators.http import require_POST
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse
@@ -6,7 +5,7 @@ from django.utils import simplejson
 
 from tnote.noteapp.models import *
 from tnote.noteapp.forms import *
-import random
+from .noteapp_utils import upload_images
 
 
 def index(request):
@@ -16,6 +15,17 @@ def index(request):
 
 def formadd(request):
     if request.method == 'POST':
+        if (request.FILES):
+            files = upload_images(request)
+            if files is not None:
+                response = 'Image was successfully attach.'
+                return HttpResponse(simplejson.dumps({'response': response,
+                                                      'imgurl': files,
+                                                      'result': 'success'}))
+            else:
+                resp_error = 'Some error with your Image.'
+                return HttpResponse(simplejson.dumps({'response': resp_error,
+                                                          'result': 'error'}))
         form = AddForm(request.POST)
         if form.is_valid():
             form.save()
@@ -38,26 +48,3 @@ def formadd(request):
         form = AddForm()
     formimg = UploadImage()
     return render(request, 'formadd.html', {'form': form, 'formimg': formimg})
-
-
-@require_POST
-def upload_img(request):
-    if (request.FILES):
-        n = str(random.randint(0, 100000))
-        resp_error = 'Some error with your Image.'
-        try:
-            img_extension = request.FILES['imagefile'].name.split('.')[-1]
-            request.FILES['imagefile'].name = "%s.%s" % (n, img_extension)
-        except:
-            return HttpResponse(simplejson.dumps({'response': resp_error,
-                                                      'result': 'error'}))
-        formimg = UploadImage(request.POST, request.FILES)
-        if formimg.is_valid():
-            imgurl = formimg.save().imagefile.url
-            response = 'Image was successfully attach.'
-            return HttpResponse(simplejson.dumps({'response': response,
-                                                  'imgurl': imgurl,
-                                                  'result': 'success'}))
-        else:
-            return HttpResponse(simplejson.dumps({'response': resp_error,
-                                                      'result': 'error'}))

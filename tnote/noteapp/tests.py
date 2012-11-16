@@ -7,10 +7,11 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 from django.template import Context, Template, RequestContext
-from tnote.noteapp.models import Entry
+from tnote.noteapp.models import Entry, Imgfile
 from tnote.noteapp.utils.context_processors import total_count_of_notes
 from tnote.noteapp.widgets import DynamicAmountOfSymbols
 from django.test.client import Client
+from django.conf import settings
 
 
 class CheckThatTheURLisAccessible(TestCase):
@@ -68,6 +69,8 @@ class FormsWidgetsTestCase(TestCase):
         self.assertHTMLEqual(w.render('msg', ''),
                 '<textarea rows="50" cols="50" name="msg"></textarea>')
 
+
+class FormsSubmissionTestCase(TestCase):
     def test_add_note_success(self):
         _sometext = u'simple_text_12345'
         response = self.client.post('/add/', {'text': _sometext})
@@ -103,3 +106,32 @@ class FormsWidgetsTestCase(TestCase):
         self.assertFalse(len(_sometext) > 10)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Some error in your data.', response.content)
+
+    def test_upload_img(self):
+        f = open(settings.PROJECT_ROOT + '/tmp/image.png')
+        response = self.client.post('/add/', {'imagefile': f})
+        f.close()
+        self.assertIn('Image was successfully attach.', response.content)
+        self.assertEqual(response.status_code, 200)
+        obj = Imgfile.objects.get(pk=1)
+        self.assertIn(obj.imagefile.name, response.content)
+        obj.imagefile.delete()
+
+    def test_ajax_upload_img(self):
+        f = open(settings.PROJECT_ROOT + '/tmp/image.png')
+        response = self.client.post('/add/', {'imagefile': f},
+                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        f.close()
+        self.assertIn('Image was successfully attach.', response.content)
+        self.assertEqual(response.status_code, 200)
+        obj = Imgfile.objects.get(pk=1)
+        self.assertIn(obj.imagefile.name, response.content)
+        obj.imagefile.delete()
+
+    def test_ajax_upload_bad_img(self):
+        f = open(settings.PROJECT_ROOT + '/tmp/not_image')
+        response = self.client.post('/add/', {'imagefile': f},
+                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        f.close()
+        self.assertIn('Some error with your Image.', response.content)
+        self.assertEqual(response.status_code, 200)
