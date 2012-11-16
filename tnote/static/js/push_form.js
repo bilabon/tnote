@@ -12,8 +12,9 @@ $(document).ready(function() {
             complete: function(xhr) {
                 status.html(xhr.responseText);
             },
-            success: function(data, statusText, xhr, $form) {
+            success: function(data, statusText, xhr, $form) {                
                 $form.find('.alert').remove();
+                $('#form_upload_image').find('.alert').remove();
                 if (data['result'] == 'success') {
                     $('#Reset').click();
                     $("textarea[id='id_text']").click();

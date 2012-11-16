@@ -9,3 +9,9 @@ class AddForm(forms.ModelForm):
 
     class Meta:
         model = Entry
+
+
+class UploadImage(forms.ModelForm):
+
+    class Meta:
+        model = Imgfile

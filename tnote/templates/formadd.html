@@ -23,8 +23,16 @@
     <div id="error_list"></div>
 {{ form.as_p }}
 <span id="push_form"><input type="submit" id="sbmtypeid" class="btn" value="Submit"></span>
-
 </form>
+
+
+<form id="form_upload_image" method="post" action="/addimg/" enctype="multipart/form-data" >{% csrf_token %}
+    <div id="list_message"></div>
+{{ formimg.as_p }}
+<span id="push_form_upload_image"><input type="submit" id="sbmuploadimg" class="btn" value="Upload" ></span>
+</form>
+
+
 <div id="status"></div>
 </div>
 
@@ -34,4 +42,5 @@
 <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
 <script src="{{ STATIC_URL }}js/count_of_notes.js"></script>
 <script src="{{ STATIC_URL }}js/push_form.js"></script>
+<script src="{{ STATIC_URL }}js/upload_img.js"></script>
 {% endblock %}
