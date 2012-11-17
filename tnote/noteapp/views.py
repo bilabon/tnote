@@ -15,20 +15,14 @@ def index(request):
 def formadd(request):
     if request.method == 'POST':
         form = AddForm(request.POST)
+        response = 'Note was successfully added.'
         if form.is_valid():
             form.save()
             form = AddForm()
-            response = 'Note was successfully added.'
-            if request.is_ajax():
-                return HttpResponse(simplejson.dumps({'response': response,
-                                                      'result': 'success'}))
             messages.success(request, response)
             return render(request, 'formadd.html', {'form': form},)
         else:
             response = 'Some error in your data.'
-            if request.is_ajax():
-                return HttpResponse(simplejson.dumps({'response': response,
-                                                      'result': 'error'}))
             messages.error(request, 'Some error in your data.')
     else:
         form = AddForm()

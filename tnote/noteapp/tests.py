@@ -68,6 +68,8 @@ class FormsWidgetsTestCase(TestCase):
         self.assertHTMLEqual(w.render('msg', ''),
                 '<textarea rows="50" cols="50" name="msg"></textarea>')
 
+
+class Forms_Submission_TestCase(TestCase):
     def test_add_note_success(self):
         _sometext = u'simple_text_12345'
         response = self.client.post('/add/', {'text': _sometext})
@@ -81,25 +83,6 @@ class FormsWidgetsTestCase(TestCase):
     def test_add_note_fail(self):
         _sometext = u's_text'
         response = self.client.post('/add/', {'text': _sometext})
-        self.assertFalse(len(_sometext) > 10)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Some error in your data.', response.content)
-
-    def test_ajax_add_note_success(self):
-        _sometext = u'simple_text_12345'
-        response = self.client.post('/add/', {'text': _sometext},
-                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        self.assertTrue(len(_sometext) > 10)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('Note was successfully added.', response.content)
-        self.assertTrue(Entry.objects.get(text=_sometext))
-        obj = Entry.objects.get(text=_sometext)
-        self.assertEqual(_sometext, obj.text)
-
-    def test_ajax_add_note_fail(self):
-        _sometext = u's_text'
-        response = self.client.post('/add/', {'text': _sometext},
-                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertFalse(len(_sometext) > 10)
         self.assertEqual(response.status_code, 200)
         self.assertIn('Some error in your data.', response.content)
