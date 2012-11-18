@@ -9,6 +9,7 @@
 
 {% block bar %}
 <div class="well well-small">
+    <div id="notification"></div>
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -19,12 +20,16 @@
     </ul>
     {% endif %}
 
-<form id="add_form" method="post" action="/add/">{% csrf_token %}
-    <div id="error_list"></div>
-{{ form.as_p }}
-<span id="push_form"><input type="submit" id="sbmtypeid" class="btn" value="Submit"></span>
-
+<form id="add_form" method="post" action="/add/">
+    {% csrf_token %}
+    <p><label for="id_text"><b>Text:</b></label></p>
+    <p>{{ form.text }}</p>
+    {{ form.text.errors }}
+    <p><span id="push_form">
+        <input type="submit" id="sbmtypeid" class="btn" value="Submit">
+    </span></p>
 </form>
+
 <div id="status"></div>
 </div>
 
@@ -33,4 +38,6 @@
 {% block js %}
 <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
 <script src="{{ STATIC_URL }}js/count_of_notes.js"></script>
+<script src="{{ STATIC_URL }}js/push_form2.js"></script>
+
 {% endblock %}

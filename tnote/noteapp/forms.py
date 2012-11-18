@@ -1,7 +1,6 @@
 from django import forms
-from django.core.validators import MinLengthValidator
-from tnote.noteapp.models import *
 from tnote.noteapp.widgets import DynamicAmountOfSymbols
+from tnote.noteapp.models import *
 
 
 class AddForm(forms.ModelForm):
@@ -12,12 +11,17 @@ class AddForm(forms.ModelForm):
         fields = ('text',)
 
     def clean(self):
-        data = self.cleaned_data
-        msg_error = u'Your note must be at least 10 characters.'
+        cleaned_data = super(AddForm, self).clean()
+        text = cleaned_data.get("text")
         try:
-            if len(data['text']) >= 10:
-                return self.cleaned_data
-            else:
-                raise forms.ValidationError(msg_error)
-        except KeyError:
-            raise forms.ValidationError(msg_error)
+            len(text)
+        except TypeError:
+            msg_error = u'Your note must be at least 10 characters.'
+            self._errors["text"] = self.error_class([msg_error])
+            return cleaned_data
+
+        if len(text) < 10:
+            msg_error = u'Your note must be at least 10 characters.'
+            self._errors["text"] = self.error_class([msg_error])
+            del cleaned_data["text"]
+        return cleaned_data

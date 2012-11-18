@@ -9,21 +9,28 @@ from tnote.noteapp.forms import *
 
 def index(request):
     entries = Entry.objects.all()
-    return render(request, 'index.html', {'entries': entries},)
+    return render(request, 'index.html', {'entries': entries}, )
 
 
 def formadd(request):
     if request.method == 'POST':
         form = AddForm(request.POST)
-        response = 'Note was successfully added.'
         if form.is_valid():
             form.save()
+            response = 'Note was successfully added.'
+            if request.is_ajax():
+                return HttpResponse(simplejson.dumps({'response': response,
+                                                      'result': 'success'}))
             form = AddForm()
             messages.success(request, response)
-            return render(request, 'formadd.html', {'form': form},)
         else:
-            response = 'Some error in your data.'
+            response = {}
+            for k in form.errors:
+                response[k] = form.errors[k][0]
+            if request.is_ajax():
+                return HttpResponse(simplejson.dumps({'response': response,
+                                                      'result': 'error'}))
             messages.error(request, 'Some error in your data.')
     else:
         form = AddForm()
-    return render(request, 'formadd.html', {'form': form},)
+    return render(request, 'formadd.html', {'form': form}, )
