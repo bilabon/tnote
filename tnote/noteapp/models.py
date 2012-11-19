@@ -13,7 +13,8 @@ class Entry(models.Model):
     text = models.TextField()
     imagefile = models.ImageField(upload_to=get_file_path,
                                   verbose_name=u"Image",
-                                  blank=True)
+                                  blank=True,
+                                  null=True)
 
     def __unicode__(self):
         return self.text
