@@ -11,6 +11,7 @@ from tnote.noteapp.models import Entry
 from tnote.noteapp.utils.context_processors import total_count_of_notes
 from tnote.noteapp.widgets import DynamicAmountOfSymbols
 from django.test.client import Client
+from django.conf import settings
 
 
 class CheckThatTheURLisAccessible(TestCase):
@@ -104,3 +105,40 @@ class Forms_Submission_TestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('Your note must be at least 10 characters.',
                                                               response.content)
+
+    def test_upload_img(self):
+        _sometext = u'simple_text_12345678'
+        f = open(settings.PROJECT_ROOT + '/test/image.gif')
+        response = self.client.post('/add/', {'imagefile': f,
+                                              'text': _sometext}, )
+        f.close()
+        self.assertIn('Note was successfully added.', response.content)
+        self.assertEqual(response.status_code, 200)
+        obj = Entry.objects.get(text=_sometext)
+        self.assertTrue(settings.MEDIA_ROOT + obj.imagefile.name)
+        obj.imagefile.delete()
+
+    def test_ajax_upload_img(self):
+        _sometext = u'simple_text_12345678'
+        f = open(settings.PROJECT_ROOT + '/test/image.gif')
+        response = self.client.post('/add/', {'imagefile': f,
+                                              'text': _sometext},
+                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    )
+        f.close()
+        self.assertIn('Note was successfully added.', response.content)
+        self.assertEqual(response.status_code, 200)
+        obj = Entry.objects.get(text=_sometext)
+        self.assertTrue(settings.MEDIA_ROOT + obj.imagefile.name)
+        obj.imagefile.delete()
+
+    def test_ajax_upload_bad_img(self):
+        _sometext = u'simple_text_12345678'
+        f = open(settings.PROJECT_ROOT + '/test/text')
+        response = self.client.post('/add/', {'imagefile': f,
+                                              'text': _sometext},
+                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                                    )
+        f.close()
+        self.assertIn('Some error with your image.', response.content)
+        self.assertEqual(response.status_code, 200)
