@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load custom_tags %}
+
+{% block title %}Main{% endblock %}
+
+{% block nav %}
+    <li><a href="/">Home</a></li>
+    <li><a href="/add">Add text note</a></li>
+    <li class="active"><a href="/asite">Copy random note</a></li>
+{% endblock %}
+
+{% block bar %}
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h5>You need to copy it: 
+    <span class="badge badge-warning">{{ copy_string }}</span> 
+    and you will see somesing like below.</h5>
+</div>
+
+
+<div class="well well-small">
+{{copy_string|safe}}
+</div>
+
+
+{% endblock %}

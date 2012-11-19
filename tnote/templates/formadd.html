@@ -5,6 +5,7 @@
 {% block nav %}
 <li><a href="/">Home</a></li>
 <li class="active"><a href="/add">Add text note</a></li>
+<li><a href="/asite">Copy random note</a></li>
 {% endblock %}
 
 {% block bar %}
@@ -39,7 +40,7 @@
             <span class="fileupload-exists">Change</span>
             {{ form.imagefile }}
         </span>
-        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload" >Remove</a>
+        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload" id="image_remove">Remove</a>
         <div id="id_imagefile_error"></div>
         <p>{{ form.imagefile.errors }}</p>
     </div>
