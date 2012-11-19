@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import ImageField
 from tnote.noteapp.widgets import DynamicAmountOfSymbols
 from tnote.noteapp.models import *
 
@@ -8,11 +9,18 @@ class AddForm(forms.ModelForm):
 
     class Meta:
         model = Entry
-        fields = ('text',)
+        fields = ('text', 'imagefile', )
 
     def clean(self):
         cleaned_data = super(AddForm, self).clean()
         text = cleaned_data.get("text")
+
+        try:
+            self.cleaned_data['imagefile']
+        except KeyError:
+            msg_error = u'Some error with your image.'
+            self._errors["imagefile"] = self.error_class([msg_error])
+
         try:
             len(text)
         except TypeError:

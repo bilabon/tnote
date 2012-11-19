@@ -1,11 +1,11 @@
 function display_alert_errors(errors, $form, typealert){
     for (var k in errors){
-        $form.find('#id_text').after('<p><div class="error"><b>' + errors[k] + '</b></div></p>');
+        $form.find('#id_'+k+'_error').after('<p><div class="error"><span class="label label-important">' + errors[k] + '</span></div></p>');
     }
 }
 
 function display_alert_success(alert, $form, typealert){
-    $('#notification').after('<div class="alert '+typealert+'"><button type="button" class="close" data-dismiss="alert">×</button>' + alert + '</div>');
+    $('#notification').after('<div class="alert '+typealert+'"><button type="button" class="close" data-dismiss="alert">×</button><b>' + alert + '</b></div>');
 }
 
 $(document).ready(function() {

@@ -20,11 +20,30 @@
     </ul>
     {% endif %}
 
-<form id="add_form" method="post" action="/add/">
+<form id="add_form" method="post" action="/add/" enctype="multipart/form-data">
     {% csrf_token %}
+
     <p><label for="id_text"><b>Text:</b></label></p>
     <p>{{ form.text }}</p>
-    {{ form.text.errors }}
+    <div id="id_text_error"></div>
+    <p>{{ form.text.errors }}</p>
+
+    <p><label for="id_imagefile"><b>Image:</b></label></p>
+    <div class="fileupload fileupload-new" data-provides="fileupload">
+        <div class="fileupload-new thumbnail" style="width: 50px; height: 50px;">
+            <img src="{{STATIC_URL}}img/AAAAAA.gif" />
+        </div>
+        <div class="fileupload-preview fileupload-exists thumbnail" style="width: 50px; height: 50px;"></div>
+        <span class="btn btn-file">
+            <span class="fileupload-new">Select image</span>
+            <span class="fileupload-exists">Change</span>
+            {{ form.imagefile }}
+        </span>
+        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload" >Remove</a>
+        <div id="id_imagefile_error"></div>
+        <p>{{ form.imagefile.errors }}</p>
+    </div>
+
     <p><span id="push_form">
         <input type="submit" id="sbmtypeid" class="btn" value="Submit">
     </span></p>
