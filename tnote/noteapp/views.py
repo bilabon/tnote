@@ -14,7 +14,7 @@ def index(request):
 
 def formadd(request):
     if request.method == 'POST':
-        form = AddForm(request.POST)
+        form = AddForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             response = 'Note was successfully added.'
