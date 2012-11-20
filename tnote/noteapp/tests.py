@@ -23,6 +23,17 @@ class CheckThatTheURLisAccessible(TestCase):
         response = self.client.get('/add/')
         self.assertEqual(response.status_code, 200)
 
+    def test_asite(self):
+        response = self.client.get('/asite/', HTTP_HOST='127.0.0.1',)
+        c = '<script src="http://127.0.0.1/randomnote/" '
+        c += 'type="text/javascript"></script>'
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(c, response.content)
+
+    def test_randomnote(self):
+        response = self.client.get('/randomnote/')
+        self.assertEqual(response.status_code, 200)
+
     def test_admin(self):
         response = self.client.get('/admin/')
         self.assertEqual(response.status_code, 200)

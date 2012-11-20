@@ -19,12 +19,16 @@ $(document).ready(function() {
             },
             success: function(data, statusText, xhr, $form) {
                 $form.find('.error').remove();
+                $('.alert').remove();
+                
                 if (data['result'] == 'success') {
                     $('#Reset').click();
                     $("textarea[id='id_text']").click();
+                    $form.find('#image_remove').click();
                     display_alert_success(data['response'], $form,'alert-success');
                 }
                 else if (data['result'] == 'error') {
+                    $('.alert').remove();
                     $form.find('.error').remove();
                     display_alert_errors(data['response'], $form, 'alert-block');
                 }
