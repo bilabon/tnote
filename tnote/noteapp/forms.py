@@ -1,17 +1,22 @@
 from django import forms
-from django.forms import ImageField
-from tnote.noteapp.widgets import DynamicAmountOfSymbols
-from tnote.noteapp.models import *
+from tnote.noteapp.widgets import DynamicAmount
+from tnote.noteapp.models import Entry
 
 
 class AddForm(forms.ModelForm):
-    text = forms.CharField(widget=DynamicAmountOfSymbols())
+    """
+    form for adding a note and attach images
+    """
+    text = forms.CharField(widget=DynamicAmount)
 
     class Meta:
         model = Entry
         fields = ('text', 'imagefile', )
 
     def clean(self):
+        """
+        check that form fields are right
+        """
         cleaned_data = super(AddForm, self).clean()
         text = cleaned_data.get("text")
 

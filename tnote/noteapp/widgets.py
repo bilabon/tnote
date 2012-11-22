@@ -1,9 +1,12 @@
 from django import forms
 from django.conf import settings
-from django.forms import Textarea
 
 
-class DynamicAmountOfSymbols(forms.Textarea):
+class DynamicAmount(forms.Textarea):
+    """
+    Custom widget thet extends textarea widget and show dynamically amount
+    of symbols are writed in field.
+    """
     class Media:
         js = (
         settings.STATIC_URL + "js/jquery-1.8.2.min.js",
@@ -14,4 +17,4 @@ class DynamicAmountOfSymbols(forms.Textarea):
         attrs = kwargs.setdefault('attrs', {})
         attrs.setdefault('cols', '100')
         attrs.setdefault('rows', '10')
-        super(DynamicAmountOfSymbols, self).__init__(*args, **kwargs)
+        super(DynamicAmount, self).__init__(*args, **kwargs)
