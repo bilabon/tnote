@@ -5,41 +5,59 @@
 {% block nav %}
 <li><a href="/">Home</a></li>
 <li class="active"><a href="/add">Add text note</a></li>
+<li><a href="/asite">Copy random note</a></li>
 {% endblock %}
 
 {% block bar %}
-    <div class="well well-small">
+<div class="well well-small">
+    <div id="notification"></div>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li>
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
-<form id="add_form" method="post" action="/add/" enctype="multipart/form-data">{% csrf_token %}
-    <div class="error_list"></div>
-        {{ form.as_p }}
-        </br>
-        <span id="push_form"><input type="button" class="btn btn-small" value="Save note"></span>
-        <input id="Reset" type="reset" style="display:none">
-</form>
+<form id="add_form" method="post" action="/add/" enctype="multipart/form-data">
+    {% csrf_token %}
 
-<form id="add_formimg" method="post" action="/add/" enctype="multipart/form-data">{% csrf_token %}
-    <div class="error_list"></div>
-        {{ formimg.as_p }}        
-        <span id="push_formimg"><input type="button" id="pushimg" style="display:none"  value="Save"></span>
-        <input id="Resetimg" type="reset" style="display:none">
-</form>
+    <p><label for="id_text"><b>Text:</b></label></p>
+    <p>{{ form.text }}</p>
+    <div id="id_text_error"></div>
+    <p>{{ form.text.errors }}</p>
 
-
-
-
-<div class="progress progress-striped active">
-        <div class="bar"></div>
-        <div class="percent">0%</div>
+    <p><label for="id_imagefile"><b>Image:</b></label></p>
+    <div class="fileupload fileupload-new" data-provides="fileupload">
+        <div class="fileupload-new thumbnail" style="width: 50px; height: 50px;">
+            <img src="{{STATIC_URL}}img/AAAAAA.gif" />
+        </div>
+        <div class="fileupload-preview fileupload-exists thumbnail" style="width: 50px; height: 50px;"></div>
+        <span class="btn btn-file">
+            <span class="fileupload-new">Select image</span>
+            <span class="fileupload-exists">Change</span>
+            {{ form.imagefile }}
+        </span>
+        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload" id="image_remove">Remove</a>
+        <div id="id_imagefile_error"></div>
+        <p>{{ form.imagefile.errors }}</p>
     </div>
+
+    <p><span id="push_form">
+        <input type="submit" id="sbmtypeid" class="btn" value="Submit">
+    </span></p>
+</form>
+
 <div id="status"></div>
-
-    </div>
+</div>
 
 {% endblock %}
 
-{% block scripts %}
+{% block js %}
 <script src="{{ STATIC_URL }}js/jquery.form.js"></script>
-<script src="{{ STATIC_URL }}js/js_amount_of_symbols.js"></script>
-<script src="{{ STATIC_URL }}js/js_of_noteapp.js"></script>
+<script src="{{ STATIC_URL }}js/count_of_notes.js"></script>
+<script src="{{ STATIC_URL }}js/push_form.js"></script>
+
 {% endblock %}

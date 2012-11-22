@@ -4,21 +4,35 @@
 {% block title %}Main{% endblock %}
 
 {% block nav %}
-<li class="active"><a href="/">Home</a></li>
-<li><a href="/add">Add text note</a></li>
+    <li class="active"><a href="/">Home</a></li>
+    <li><a href="/add">Add text note</a></li>
+    <li><a href="/asite">Copy random note</a></li>
 {% endblock %}
 
 {% block bar %}
 <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">×</button>
-    <h4>Total count of notes: <span class="badge badge-warning">{{ total_count_of_notes }}</span> notes.</h4>
+    <h4>Total count of notes: 
+    <span class="badge badge-warning">{{ total_count_of_notes }}</span> notes.</h4>
 </div>
 
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4>For show one random note please copy: 
+    <span class="badge badge-warning">{{ copy_string }}</span> 
+    </h4>
+</div>
 
     {% for e in entries %}
-    <div class="well well-small">
-        <p>{% render_one_text_note e.id %}</p>
-    </div>
+        <div class="well well-small">
+            <p>{% render_one_text_note e.id %}</p>
+            {% if e.imagefile %}
+            <p><a href="{{ MEDIA_URL }}{{ e.imagefile }}" Target="_blank">
+                <img src="{{ MEDIA_URL }}{{ e.imagefile }}" width="100" height="100">
+                </a>
+            </p>
+            {% endif %}
+        </div>
     {% endfor %}
 
 {% endblock %}

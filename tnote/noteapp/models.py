@@ -1,17 +1,20 @@
 from django.db import models
-from django.core.validators import MinLengthValidator
+import os
+import random
 
 
-class Imgfile(models.Model):
-    imagefile = models.ImageField(upload_to='img/', verbose_name=u"Image",
-                                  blank=True)
-
-    def __unicode__(self):
-        return self.imagefile.path.split('/')[-1]
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (str(random.randint(0, 1000000)), ext)
+    return os.path.join('img', filename)
 
 
 class Entry(models.Model):
-    text = models.TextField(validators=[MinLengthValidator(10)])
+    text = models.TextField()
+    imagefile = models.ImageField(upload_to=get_file_path,
+                                  verbose_name=u"Image",
+                                  blank=True,
+                                  null=True)
 
     def __unicode__(self):
         return self.text

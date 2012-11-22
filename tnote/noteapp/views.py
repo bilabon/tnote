@@ -1,57 +1,85 @@
-from django.views.generic.simple import direct_to_template
 from django.shortcuts import render
-from django.utils import simplejson
+from django.contrib import messages
 from django.http import HttpResponse
-from django.conf import settings
+from django.utils import simplejson
+
+from urllib import quote
+from django.db.models import Max
+from math import ceil
 import random
 
-from tnote.noteapp.models import Entry, Imgfile
-from tnote.noteapp.forms import AddForm, AddImage
+from tnote.noteapp.models import Entry
+from tnote.noteapp.forms import AddForm
+
+
+def get_widget_line(http_host, link):
+    """
+    Return a line of widget that can be inserted in any page.
+    """
+    url = 'http://%s%s' % (http_host, link)
+    line = '<script src="' + url + '" type="text/javascript"></script>'
+    return line
 
 
 def index(request):
+    """
+    main page of blog
+    """
     entries = Entry.objects.all()
-    return render(request, 'index.html', {'entries': entries, },)
+    copy_string = get_widget_line(request.META['HTTP_HOST'], '/randomnote/')
+    return render(request, 'index.html', {'entries': entries,
+                                          'copy_string': copy_string}, )
 
 
 def formadd(request):
-    if (request.method == 'POST' and request.is_ajax()):
-        if (request.FILES):
-            n = str(random.randint(0, 100000))
-            try:
-                img_extension = request.FILES['imagefile'].name.split('.')[-1]
-                request.FILES['imagefile'].name = u"%s.%s" % (n, img_extension)
-            except:
-                print 'Error image.'
-        form = AddForm(request.POST)
-        formimg = AddImage(request.POST, request.FILES)
-
+    """
+    page for adding new articles and attach images
+    """
+    if request.method == 'POST':
+        form = AddForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            response = u'Note has been sent.'
-            return HttpResponse(simplejson.dumps({'response': response,
-                                                  'result': 'success', }))
-        elif (formimg.is_valid() and request.FILES):
-            formimg.save()
-            imagefileurl = formimg.save().imagefile.url
-            response = u'Image been added.'
-            response += u" Name: %s | Photo size: %s byte" % (
-            request.FILES['imagefile'].name, request.FILES['imagefile'].size)
-            return HttpResponse(simplejson.dumps({'response': response,
-                                                  'imagefileurl': imagefileurl,
-                                                  'result': 'success', }))
+            response = 'Note was successfully added.'
+            if request.is_ajax():
+                return HttpResponse(simplejson.dumps({'response': response,
+                                                      'result': 'success'}))
+            form = AddForm()
+            messages.success(request, response)
         else:
             response = {}
             for k in form.errors:
                 response[k] = form.errors[k][0]
-            response2 = {}
-            for kk in formimg.errors:
-                response2[kk] = formimg.errors[kk][0]
-            return HttpResponse(simplejson.dumps({'response': response,
-                                                  'response2': response2,
-                                                  'result': 'error',
-                                                  'result2': 'error', }))
-    form = AddForm()
-    formimg = AddImage()
-    return render(request, "formadd.html", {'form': form,
-                                             'formimg': formimg, },)
+            if request.is_ajax():
+                return HttpResponse(simplejson.dumps({'response': response,
+                                                      'result': 'error'}))
+    else:
+        form = AddForm()
+    return render(request, 'formadd.html', {'form': form}, )
+
+
+def get_random_item(model, max_id=None):
+    """
+    return random note from base
+    """
+    if max_id is None:
+        max_id = model.objects.aggregate(Max('id')).values()[0]
+    min_id = ceil(max_id * random.random())
+    return model.objects.filter(id__gte=min_id)[0]
+
+
+def randomnote(request):
+    """
+    page for widget that return random note
+    """
+    entries = get_random_item(Entry)
+    note = quote(entries.text.replace('\r', '<br/>').encode("utf-8"))
+    return HttpResponse('document.write(unescape("' + note + '"));',
+                                                    mimetype="text/javascript")
+
+
+def asite(request):
+    """
+    page for see work widget than show random note
+    """
+    copy_string = get_widget_line(request.META['HTTP_HOST'], '/randomnote/')
+    return render(request, 'asite.html', {'copy_string': copy_string}, )

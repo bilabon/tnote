@@ -1,15 +1,17 @@
 from django import template
-from tnote.noteapp.models import *
+from tnote.noteapp.models import Entry
 
 register = template.Library()
 
 
 @register.simple_tag
 def render_one_text_note(number_id):
+    """
+    Custom template tag that will render one text note
+    by given id of note.
+    """
     try:
-        t = Entry.objects.get(pk=number_id)
+        entry = Entry.objects.get(pk=number_id)
+        return entry.text
     except Entry.DoesNotExist:
-        print "Error. Incorrect ID. Apress isn't in database yet."
         return ""
-    else:
-        return t.text

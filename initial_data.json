@@ -19,19 +19,5 @@
     "fields": {
       "text": "Django provides a hook for passing the database arbitrary SQL that's executed just after the CREATE TABLE statements when you run syncdb. You can use this hook to populate default records, or you could also create SQL functions, views, triggers, etc.\nThe hook is simple: Django just looks for a file called sql/<modelname>.sql, in your app directory, where <modelname> is the model's name in lowercase.\n So, if you had a Person model in an app called myapp, you could add arbitrary SQL to the file sql/person.sql inside your myapp directory."
     }
-  },
-  {
-    "model": "noteapp.Entry",
-    "pk": 4,
-    "fields": {
-      "text": "This is note with image </br><img src=../media/img/1.png class=img-polaroid width=100 height=100 />"
-    }
-  },
-  {
-    "model": "noteapp.Imgfile",
-    "pk": 1,
-    "fields": {
-      "imagefile": "img/1.png"
-    }
   }
 ]
