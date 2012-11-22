@@ -12,7 +12,15 @@
 {% block bar %}
 <div class="alert alert-info">
     <button type="button" class="close" data-dismiss="alert">×</button>
-    <h4>Total count of notes: <span class="badge badge-warning">{{ total_count_of_notes }}</span> notes.</h4>
+    <h4>Total count of notes: 
+    <span class="badge badge-warning">{{ total_count_of_notes }}</span> notes.</h4>
+</div>
+
+<div class="alert alert-info">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4>For show one random note please copy: 
+    <span class="badge badge-warning">{{ copy_string }}</span> 
+    </h4>
 </div>
 
     {% for e in entries %}
