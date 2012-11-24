@@ -23,7 +23,7 @@ def get_widget_line(http_host, link):
 
 def index(request):
     """
-    main page of blog
+    Main page of blog.
     """
     entries = Entry.objects.all()
     copy_string = get_widget_line(request.META['HTTP_HOST'], '/randomnote/')
@@ -33,7 +33,7 @@ def index(request):
 
 def formadd(request):
     """
-    page for adding new articles and attach images
+    Page for adding new articles and attach images.
     """
     if request.method == 'POST':
         form = AddForm(request.POST, request.FILES)
@@ -42,7 +42,7 @@ def formadd(request):
             response = 'Note was successfully added.'
             if request.is_ajax():
                 return HttpResponse(simplejson.dumps({'response': response,
-                                                      'result': 'success'}))
+                                                      'result': 'success'},))
             form = AddForm()
             messages.success(request, response)
         else:
@@ -51,7 +51,7 @@ def formadd(request):
                 response[k] = form.errors[k][0]
             if request.is_ajax():
                 return HttpResponse(simplejson.dumps({'response': response,
-                                                      'result': 'error'}))
+                                                      'result': 'error'},))
     else:
         form = AddForm()
     return render(request, 'formadd.html', {'form': form}, )
@@ -59,7 +59,7 @@ def formadd(request):
 
 def get_random_item(model, max_id=None):
     """
-    return random note from base
+    Return random note from base.
     """
     if max_id is None:
         max_id = model.objects.aggregate(Max('id')).values()[0]
@@ -69,7 +69,7 @@ def get_random_item(model, max_id=None):
 
 def randomnote(request):
     """
-    page for widget that return random note
+    Page for widget that return random note.
     """
     entries = get_random_item(Entry)
     note = quote(entries.text.replace('\r', '<br/>').encode("utf-8"))
@@ -79,7 +79,7 @@ def randomnote(request):
 
 def asite(request):
     """
-    page to show work widget that show random note
+    Page to show work widget that show random note.
     """
     copy_string = get_widget_line(request.META['HTTP_HOST'], '/randomnote/')
     return render(request, 'asite.html', {'copy_string': copy_string}, )

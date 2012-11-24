@@ -11,47 +11,53 @@ from tnote.noteapp.models import Entry
 from tnote.noteapp.widgets import DynamicAmount
 from django.conf import settings
 import os
+from django.core.urlresolvers import reverse
+
+INDEX_URL = reverse('index')
+ADD_URL = reverse('add')
+ASITE_URL = reverse('asite')
+RANDOMNOTE_URL = reverse('randomnote')
 
 
-class CheckUrl(TestCase):
+class CheckAccessURL(TestCase):
     """
-    Check URLs
+    Check access URLs.
     """
-    def test_index(self):
+    def test_access_index_url(self):
         """
-        Test index url
+        Check index url.
         """
-        response = self.client.get('/', HTTP_HOST='127.0.0.1',)
+        response = self.client.get(INDEX_URL, HTTP_HOST='127.0.0.1',)
         self.assertEqual(response.status_code, 200)
 
-    def test_add(self):
+    def test_access_add_url(self):
         """
-        Test /add/ url
+        Check adding note URL.
         """
-        response = self.client.get('/add/')
+        response = self.client.get(ADD_URL)
         self.assertEqual(response.status_code, 200)
 
-    def test_asite(self):
+    def test_access_asite_url(self):
         """
-        Test /asite/ url
+        Check ASITE_URL url.
         Test independent widget that can be inserted in any page.
         """
-        response = self.client.get('/asite/', HTTP_HOST='127.0.0.1',)
-        strn = '<script src="http://127.0.0.1/randomnote/" '
-        strn += 'type="text/javascript"></script>'
+        response = self.client.get(ASITE_URL, HTTP_HOST='127.0.0.1', )
+        widget_line = '<script src="http://127.0.0.1/randomnote/" '
+        widget_line += 'type="text/javascript"></script>'
         self.assertEqual(response.status_code, 200)
-        self.assertIn(strn, response.content)
+        self.assertIn(widget_line, response.content)
 
-    def test_randomnote(self):
+    def test_access_randomnote_page(self):
         """
-        Test /randomnote/ url
+        Check url that use widget for return random note
         """
-        response = self.client.get('/randomnote/')
+        response = self.client.get(RANDOMNOTE_URL)
         self.assertEqual(response.status_code, 200)
 
-    def test_admin(self):
+    def test_access_admin_page(self):
         """
-        Test /admin/ url
+        Check /admin/ url
         """
         response = self.client.get('/admin/')
         self.assertEqual(response.status_code, 200)
@@ -70,19 +76,22 @@ class CustomTests(TestCase):
         by given id of note.
         """
         Entry.objects.create(text='test_text_TemplateTagsTestCase', id=4)
-        tmpl = Template('{% load custom_tags %}{% render_one_text_note 4 %}')
-        rcont = RequestContext({})
-        self.assertIn('test_text_TemplateTagsTestCase', tmpl.render(rcont))
+        template = Template('''{% load custom_tags %}
+                                               {% render_one_text_note 4 %}''')
+        context = RequestContext({})
+        self.assertIn('test_text_TemplateTagsTestCase',
+                                                      template.render(context))
 
     def test_custom_context_processor(self):
         """
-        Test custom context processor which pass amount to templates.
+        Test custom context processor which pass
+        total count of notes to templates.
         """
         Entry.objects.create(text='text of note')
-        tmpl = Template('{{ total_count_of_notes }}')
-        rcont = RequestContext({})
+        template = Template('{{ total_count_of_notes }}')
+        context = RequestContext({})
         count = Entry.objects.count()
-        self.assertIn(str(count), tmpl.render(rcont))
+        self.assertIn(str(count), template.render(context))
 
     def test_custom_widget(self):
         """
@@ -96,51 +105,53 @@ class CustomTests(TestCase):
                 '<textarea rows="50" cols="50" name="msg"></textarea>')
 
 
-class TestsForm(TestCase):
+class NoteFormTests(TestCase):
     """
-    Tests of form submission
+    Tests note form submit:
+    -check submit form note without javascript.
+    -check submit form note with enable javascript.
+    -check submit form note with attached image without javascript.
+    -check submit form note with attached image with enable javascript.
     """
-    def test_submit_success(self):
+    def test_submit_note_success(self):
         """
-        Test success submit without javascript.
+        Test success submit form note without javascript.
         """
         sometext = u'simple_text_12345'
-        response = self.client.post('/add/', {'text': sometext})
+        response = self.client.post(ADD_URL, {'text': sometext})
         self.assertEqual(response.status_code, 200)
         self.assertIn('Note was successfully added.', response.content)
-        self.assertTrue(Entry.objects.get(text=sometext))
         obj = Entry.objects.get(text=sometext)
         self.assertEqual(sometext, obj.text)
 
-    def test_submit_fail(self):
+    def test_submit_note_fail(self):
         """
-        Test fail submit without javascript.
+        Test fail submit form note without javascript.
         """
         sometext = u's_text'
-        response = self.client.post('/add/', {'text': sometext})
+        response = self.client.post(ADD_URL, {'text': sometext})
         self.assertEqual(response.status_code, 200)
         self.assertIn('Your note must be at least 10 characters.',
                                                               response.content)
 
-    def test_ajax_submit_success(self):
+    def test_ajax_submit_note_success(self):
         """
-        Test success submit with enable javascript.
+        Test success submit form note with enable javascript.
         """
         sometext = u'simple_text_12345'
-        response = self.client.post('/add/', {'text': sometext},
+        response = self.client.post(ADD_URL, {'text': sometext},
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Note was successfully added.', response.content)
-        self.assertTrue(Entry.objects.get(text=sometext))
         obj = Entry.objects.get(text=sometext)
         self.assertEqual(sometext, obj.text)
 
-    def test_ajax_submit_fail(self):
+    def test_ajax_submit_note_fail(self):
         """
-        Test success submit with enable javascript.
+        Test fail submit form note with enable javascript.
         """
         sometext = u's_text'
-        response = self.client.post('/add/', {'text': sometext},
+        response = self.client.post(ADD_URL, {'text': sometext},
                                         HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertIn('Your note must be at least 10 characters.',
@@ -148,12 +159,13 @@ class TestsForm(TestCase):
 
     def test_upload_img(self):
         """
-        Test success upload image with disable javascript.
+        Test success submit form note with attached image
+        with disable javascript.
         """
         sometext = u'simple_text_12345678'
         img = open(os.path.join(settings.PROJECT_ROOT,
                                             os.path.join('test', 'image.gif')))
-        response = self.client.post('/add/', {'imagefile': img,
+        response = self.client.post(ADD_URL, {'imagefile': img,
                                               'text': sometext}, )
         img.close()
         self.assertIn('Note was successfully added.', response.content)
@@ -163,12 +175,13 @@ class TestsForm(TestCase):
 
     def test_ajax_upload_img(self):
         """
-        Test success upload image with enable javascript.
+        Test success submit form note with attached image
+        with enable javascript.
         """
         sometext = u'simple_text_12345678'
         img = open(os.path.join(settings.PROJECT_ROOT,
                                             os.path.join('test', 'image.gif')))
-        response = self.client.post('/add/',
+        response = self.client.post(ADD_URL,
                                     {
                                     'imagefile': img,
                                     'text': sometext
@@ -182,12 +195,13 @@ class TestsForm(TestCase):
 
     def test_ajax_upload_fail_img(self):
         """
-        Test fail upload image with enable javascript.
+        Test submit form note with attached fail image
+        with enable javascript.
         """
         sometext = u'simple_text_12345678'
         notimg = open(os.path.join(settings.PROJECT_ROOT,
                                             os.path.join('test', 'notimg')))
-        response = self.client.post('/add/',
+        response = self.client.post(ADD_URL,
                                     {
                                     'imagefile': notimg,
                                     'text': sometext

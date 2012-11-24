@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 from django.conf import settings
-from tnote.noteapp.views import index, formadd, randomnote, asite
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -18,8 +17,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     (r'^media/(?P<path>.*)$', 'django.views.static.serve',
                                        {'document_root': settings.MEDIA_ROOT}),
-    (r'^$', index),
-    (r'^add/$', formadd),
-    (r'^randomnote/$', randomnote),
-    (r'^asite/$', asite),
+    url(r'^$', 'tnote.noteapp.views.index', name='index'),
+    url(r'^add/$', 'tnote.noteapp.views.formadd', name='add'),
+    url(r'^randomnote/$', 'tnote.noteapp.views.randomnote', name='randomnote'),
+    url(r'^asite/$', 'tnote.noteapp.views.asite', name='asite'),
 )

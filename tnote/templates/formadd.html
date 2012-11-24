@@ -3,9 +3,9 @@
 {% block title %}Add note{% endblock %}
 
 {% block nav %}
-<li><a href="/">Home</a></li>
-<li class="active"><a href="/add">Add text note</a></li>
-<li><a href="/asite">Copy random note</a></li>
+<li><a href="{% url index %}">Home</a></li>
+<li class="active"><a href="{% url add %}">Add text note</a></li>
+<li><a href="{% url asite %}">Copy random note</a></li>
 {% endblock %}
 
 {% block bar %}
