@@ -73,13 +73,13 @@ def randomnote(request):
     """
     entries = get_random_item(Entry)
     note = quote(entries.text.replace('\r', '<br/>').encode("utf-8"))
-    return HttpResponse('document.write(unescape("' + note + '"));',
-                                                    mimetype="text/javascript")
+    out = 'document.write(decodeURIComponent(escape(unescape("%s"))));' % note
+    return HttpResponse(out, mimetype="text/javascript")
 
 
 def asite(request):
     """
-    page for see work widget than show random note
+    page to show work widget that show random note
     """
     copy_string = get_widget_line(request.META['HTTP_HOST'], '/randomnote/')
     return render(request, 'asite.html', {'copy_string': copy_string}, )
