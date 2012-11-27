@@ -1,3 +1,7 @@
+"""
+Views of application noteapp.
+"""
+
 from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponse
@@ -7,6 +11,7 @@ from urllib import quote
 from django.db.models import Max
 from math import ceil
 import random
+from django.core.urlresolvers import reverse
 
 from tnote.noteapp.models import Entry
 from tnote.noteapp.forms import AddForm
@@ -26,7 +31,8 @@ def index(request):
     Main page of blog.
     """
     entries = Entry.objects.all()
-    copy_string = get_widget_line(request.META['HTTP_HOST'], '/randomnote/')
+    copy_string = get_widget_line(request.META['HTTP_HOST'],
+                                  reverse('randomnote'))
     return render(request, 'index.html', {'entries': entries,
                                           'copy_string': copy_string}, )
 
@@ -73,7 +79,7 @@ def randomnote(request):
     """
     entries = get_random_item(Entry)
     note = quote(entries.text.replace('\r', '<br/>').encode("utf-8"))
-    out = 'document.write(decodeURIComponent(escape(unescape("%s"))));' % note
+    out = 'document.write(decodeURIComponent("%s"));' % note
     return HttpResponse(out, mimetype="text/javascript")
 
 
@@ -81,5 +87,6 @@ def asite(request):
     """
     Page to show work widget that show random note.
     """
-    copy_string = get_widget_line(request.META['HTTP_HOST'], '/randomnote/')
+    copy_string = get_widget_line(request.META['HTTP_HOST'],
+                                  reverse('randomnote'))
     return render(request, 'asite.html', {'copy_string': copy_string}, )
