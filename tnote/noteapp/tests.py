@@ -74,7 +74,7 @@ class CustomTests(TestCase):
                                                {% render_one_text_note 4 %}''')
         context = RequestContext({})
         self.assertIn('test_text_TemplateTagsTestCase',
-                                                      template.render(context))
+                      template.render(context))
 
     def test_custom_context_processor(self):
         """
@@ -126,15 +126,18 @@ class NoteFormTests(TestCase):
         response = self.client.post(reverse('add'), {'text': sometext})
         self.assertEqual(response.status_code, 200)
         self.assertIn('Your note must be at least 10 characters.',
-                                                              response.content)
+                      response.content)
 
     def test_ajax_submit_note_success(self):
         """
         Test success submit form note with enable javascript.
         """
         sometext = u'simple_text_12345'
-        response = self.client.post(reverse('add'), {'text': sometext},
-                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(reverse('add'),
+                                    {
+                                    'text': sometext,
+                                    },
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest', )
         self.assertEqual(response.status_code, 200)
         self.assertIn('Note was successfully added.', response.content)
         obj = Entry.objects.get(text=sometext)
@@ -145,11 +148,14 @@ class NoteFormTests(TestCase):
         Test fail submit form note with enable javascript.
         """
         sometext = u's_text'
-        response = self.client.post(reverse('add'), {'text': sometext},
-                                        HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post(reverse('add'),
+                                    {
+                                    'text': sometext,
+                                    },
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest', )
         self.assertEqual(response.status_code, 200)
         self.assertIn('Your note must be at least 10 characters.',
-                                                              response.content)
+                      response.content)
 
     def test_upload_img(self):
         """
@@ -158,9 +164,12 @@ class NoteFormTests(TestCase):
         """
         sometext = u'simple_text_12345678'
         img = open(os.path.join(settings.PROJECT_ROOT,
-                                            os.path.join('test', 'image.gif')))
-        response = self.client.post(reverse('add'), {'imagefile': img,
-                                              'text': sometext}, )
+                   os.path.join('test', 'image.gif')))
+        response = self.client.post(reverse('add'),
+                                    {
+                                    'imagefile': img,
+                                    'text': sometext
+                                    }, )
         img.close()
         self.assertIn('Note was successfully added.', response.content)
         self.assertEqual(response.status_code, 200)
@@ -174,13 +183,13 @@ class NoteFormTests(TestCase):
         """
         sometext = u'simple_text_12345678'
         img = open(os.path.join(settings.PROJECT_ROOT,
-                                            os.path.join('test', 'image.gif')))
+                   os.path.join('test', 'image.gif')))
         response = self.client.post(reverse('add'),
                                     {
                                     'imagefile': img,
-                                    'text': sometext
+                                    'text': sometext,
                                     },
-                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest', )
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest', )
         img.close()
         self.assertIn('Note was successfully added.', response.content)
         self.assertEqual(response.status_code, 200)
@@ -194,13 +203,13 @@ class NoteFormTests(TestCase):
         """
         sometext = u'simple_text_12345678'
         notimg = open(os.path.join(settings.PROJECT_ROOT,
-                                            os.path.join('test', 'notimg')))
+                                               os.path.join('test', 'notimg')))
         response = self.client.post(reverse('add'),
                                     {
                                     'imagefile': notimg,
                                     'text': sometext
                                     },
-                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest', )
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest', )
         notimg.close()
         self.assertIn('Some error with your image.', response.content)
         self.assertEqual(response.status_code, 200)
